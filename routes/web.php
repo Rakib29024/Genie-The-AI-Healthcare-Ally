@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorAppointmentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProblemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,11 +12,14 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // AI
-    Route::post('/health-issue-info', [DashboardController::class, 'healthIssueInfoStore'])->name('health-issue-info.store');
-    Route::get('/ai-chat', [DashboardController::class, 'aiChat'])->name('ai-chat');
-    
     Route::post('/category-to-problems', [DashboardController::class, 'categoryToProblems'])->name('category-to-problems');
+    Route::post('/health-issue-info', [DashboardController::class, 'healthIssueInfoStore'])->name('health-issue-info.store');
+    Route::post('/ai-format', [DashboardController::class, 'aiFormat'])->name('ai-format');
+    Route::post('/ai-chat', [DashboardController::class, 'aiChat'])->name('ai-chat');
+
+    Route::get('/user-problem', [UserProblemController::class, 'index'])->name('user-problem');
+    Route::get('/appointments', [DoctorAppointmentController::class, 'index'])->name('appointments');
+    
 });
 
 Route::middleware('auth')->group(function () {

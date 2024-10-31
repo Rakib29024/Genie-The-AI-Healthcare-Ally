@@ -1,0 +1,40 @@
+{
+    "content":{
+        "type": "appointments",
+        "data":[
+            {
+            "title": "General Checkup",
+            "date": "2024-11-02"
+            },
+            {
+            "title": "Dental Cleaning",
+            "date": "2024-11-05"
+            },
+            {
+            "title": "Eye Examination",
+            "date": "2024-11-10"
+            },
+            {
+            "title": "Follow-up Appointment",
+            "date": "2024-11-15"
+            },
+            {
+            "title": "Physical Therapy Session",
+            "date": "2024-11-20"
+            },
+            {
+            "title": "Vaccination Appointment",
+            "date": "2024-11-25"
+            },
+            {
+            "title": "Dermatology Consultation",
+            "date": "2024-11-30"
+            },
+            {
+            "title": "Nutritional Counseling",
+            "date": "2024-12-02"
+            }
+        ]
+    }
+}
+  

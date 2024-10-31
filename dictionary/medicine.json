@@ -1,0 +1,56 @@
+{
+    "content":{
+        "type": "medicine",
+        "data":[
+            {
+              "generic_name": "Ibuprofen",
+              "brand_name": "Advil",
+              "common_use": "Pain relief, anti-inflammatory",
+              "frequency": "Every 6-8 hours as needed",
+              "when_to_take": "With food to reduce stomach irritation"
+            },
+            {
+              "generic_name": "Acetaminophen",
+              "brand_name": "Tylenol",
+              "common_use": "Pain relief, fever reducer",
+              "frequency": "Every 4-6 hours as needed",
+              "when_to_take": "Can be taken on an empty stomach or with food"
+            },
+            {
+              "generic_name": "Amoxicillin",
+              "brand_name": "Amoxil",
+              "common_use": "Antibiotic for bacterial infections",
+              "frequency": "Every 8-12 hours",
+              "when_to_take": "With or without food, but consistent with food if preferred"
+            },
+            {
+              "generic_name": "Aspirin",
+              "brand_name": "Bayer",
+              "common_use": "Pain relief, anti-inflammatory, blood thinner",
+              "frequency": "Every 4-6 hours as needed",
+              "when_to_take": "With food or milk to reduce stomach irritation"
+            },
+            {
+              "generic_name": "Lisinopril",
+              "brand_name": "Prinivil",
+              "common_use": "High blood pressure, heart failure",
+              "frequency": "Once daily",
+              "when_to_take": "At the same time each day, with or without food"
+            },
+            {
+              "generic_name": "Metformin",
+              "brand_name": "Glucophage",
+              "common_use": "Type 2 diabetes management",
+              "frequency": "Twice or three times daily",
+              "when_to_take": "With meals to reduce gastrointestinal side effects"
+            },
+            {
+              "generic_name": "Simvastatin",
+              "brand_name": "Zocor",
+              "common_use": "Cholesterol management",
+              "frequency": "Once daily in the evening",
+              "when_to_take": "In the evening, with or without food"
+            }
+        ]
+    }
+}

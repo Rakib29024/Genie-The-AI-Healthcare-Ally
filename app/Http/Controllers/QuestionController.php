@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DoctorAppointments;
-use App\Http\Requests\StoreDoctorAppointmentsRequest;
-use App\Http\Requests\UpdateDoctorAppointmentsRequest;
+use App\Models\Question;
+use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\UpdateQuestionRequest;
 
-class DoctorAppointmentsController extends Controller
+class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class DoctorAppointmentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDoctorAppointmentsRequest $request)
+    public function store(StoreQuestionRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class DoctorAppointmentsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DoctorAppointments $doctorAppointments)
+    public function show(Question $question)
     {
         //
     }
@@ -43,7 +43,7 @@ class DoctorAppointmentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DoctorAppointments $doctorAppointments)
+    public function edit(Question $question)
     {
         //
     }
@@ -51,7 +51,7 @@ class DoctorAppointmentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDoctorAppointmentsRequest $request, DoctorAppointments $doctorAppointments)
+    public function update(UpdateQuestionRequest $request, Question $question)
     {
         //
     }
@@ -59,7 +59,7 @@ class DoctorAppointmentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DoctorAppointments $doctorAppointments)
+    public function destroy(Question $question)
     {
         //
     }
