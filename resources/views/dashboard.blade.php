@@ -251,9 +251,9 @@
             template: `
             <ul style="list-style-type: none; padding: 0; margin: 0; display: grid; flex-wrap: wrap;">
                 <li v-for="(item, index) in data" :key="index" 
-                    style="display: inline-flex; align-items: center; justify-content: center; padding: 10px; border: 1px solid #e2e8f0; margin: 4px; border-radius: 8px;">
+                    style="display: inline-flex; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid #e2e8f0; margin: 4px; border-radius: 8px;">
                     
-                    @{{ index + 1 }}
+                    @{{ item.date }}
                     
                     <button 
                         @click="check(index)" 
@@ -512,15 +512,15 @@
                     _that.error = [];
                     _that.error_message = "";
                     _that.success_message = "";
+                    let pageUrl = `{{ route('ai-format') }}`;
+                    let dataForm = {
+                        questionId: questionId,
+                        chatHistorry: _that.aiConversetions
+                    };
                     _that.aiConversetions.push({
                         ai: false,
                         content: question
                     });
-                    let pageUrl = `{{ route('ai-format') }}`;
-                    let dataForm = {
-                        id: questionId
-                    };
-
                     axios.post(pageUrl, dataForm).then(function (response) {
                         _that.isLoading = false;
                         _that.error_message = "";
@@ -528,6 +528,8 @@
                         _that.isLoading = false;
 
                         if (response.data.status === 200) {
+                            //TODO if appointment type list the hit the appoinment list component
+                            console.log(response.data.list)
                             _that.aiConversetions.push({
                                 ai: true,
                                 content: 'ai-suggested-appointment-component',
@@ -585,18 +587,15 @@
                         _that.error_message = "";
                         _that.success_message = "";
                         _that.isLoading = false;
-
                         if (response.data.status === 200) {
                             _that.aiConversetions.push({
                                 ai: true,
                                 content: response.data.htmlContent
                             });
                             _that.success_message = response.data.message;
+                            _that.user_prompt = '';
                         } else {
-                            _that.aiConversetions.push({
-                                ai: true,
-                                content: response.data.message
-                            });
+                            _that.error_message = response.data.message
                         }
                     }).catch(function (error) {
                         _that.isLoading = false;
@@ -608,16 +607,10 @@
                                     _that.error_message += messages.join('<br>') + '<br>';
                                 }
                             } else {
-                                _that.aiConversetions.push({
-                                    ai: true,
-                                    content: error.response.data.message
-                                });
+                                _that.error_message = error.response.data.message
                             }
                         } else {
-                            _that.aiConversetions.push({
-                                ai: true,
-                                content: "An unexpected error occurred."
-                            });
+                            _that.error_message = "An unexpected error occurred."
                         }
                     });
                 },

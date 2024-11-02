@@ -8,100 +8,95 @@ class AiPromptService
 {
     public function get($text)
     {
-        return (object) [
-            'contents' => [
-                [
-                    'parts' => [
-                        [
-                            'text' => 'List a few popular cookie recipes using this JSON schema:
+        // return (object) [
+        //     'contents' => [
+        //         [
+        //             'parts' => [
+        //                 [
+        //                     'text' => 'List a few popular cookie recipes using this JSON schema:
         
-                                Recipe = {"recipe_name": str}
-                                Return: list[Recipe]'
-                        ]
-                    ]
-                ]
-            ],
-            'generationConfig' => [
-                'response_mime_type' => 'application/json'
-            ]
-        ];
+        //                         Recipe = {"recipe_name": str}
+        //                         Return: list[Recipe]'
+        //                 ]
+        //             ]
+        //         ]
+        //     ],
+        //     'generationConfig' => [
+        //         'response_mime_type' => 'application/json'
+        //     ]
+        // ];
     }
 
-    public function getWithJsonFormat($text)
+    public function getWithJsonFormatQAPrompt($request,$question)
     {
+        $aiChatPromptContent = $this->aiChatHistoryParser($request);
+        $listPrompt = [[
+            "role" => "user",
+            'parts' => [
+                [
+                    'text' => $question->ai_prompt.'
+
+                        Recipe = {"date": str}
+                        Return: list[Recipe]'
+                ]
+            ]]
+        ];
+        $aiPrompt = array_merge($aiChatPromptContent, $listPrompt);
+
         return (object) [
             'contents' => [
-                [
-                    'parts' => [
-                        [
-                            'text' => 'List a few popular cookie recipes using this JSON schema:
-        
-                                Recipe = {"recipe_name": str}
-                                Return: list[Recipe]'
-                        ]
-                    ]
-                ]
+                $aiPrompt
             ],
             'generationConfig' => [
                 'response_mime_type' => 'application/json'
             ]
         ];
+
     }
 
     public function getWithAllJsonFormat($text)
     {
 
-        return [
-            'contents' => [
-                [
-                    'parts' => [
-                        [
-                            'text' => 'List 5 popular cookie recipes'
-                        ]
-                    ]
-                ]
-            ],
-            'generationConfig' => [
-                'response_mime_type' => 'application/json',
-                'response_schema' => [
-                    'type' => 'ARRAY',
-                    'items' => [
-                        'type' => 'OBJECT',
-                        'properties' => [
-                            'recipe_name' => [
-                                'type' => 'STRING',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        // return [
+        //     'contents' => [
+        //         [
+        //             'parts' => [
+        //                 [
+        //                     'text' => 'List 5 popular cookie recipes'
+        //                 ]
+        //             ]
+        //         ]
+        //     ],
+        //     'generationConfig' => [
+        //         'response_mime_type' => 'application/json',
+        //         'response_schema' => [
+        //             'type' => 'ARRAY',
+        //             'items' => [
+        //                 'type' => 'OBJECT',
+        //                 'properties' => [
+        //                     'recipe_name' => [
+        //                         'type' => 'STRING',
+        //                     ],
+        //                 ],
+        //             ],
+        //         ],
+        //     ],
+        // ];
     }
 
-    public function getChat($textArray)
+    public function aiChatHistoryParser($request)
     {
-        return (object) [
-            'contents' => [
-                [
-                    "role" => "user",
-                    "parts" => [
-                        ["text" => "Hello"]
-                    ]
-                ],
-                [
-                    "role" => "model",
-                    "parts" => [
-                        ["text" => "Great to meet you. What would you like to know?"]
-                    ]
-                ],
-                [
-                    "role" => "user",
-                    "parts" => [
-                        ["text" => "I have two dogs in my house. How many paws are in my house?"]
-                    ]
+        $chats = $request->chatHistorry;
+        $formattedMessages = array_map(function($message) {
+            return [
+                "role" => $message["ai"] ? "model" : "user",
+                "parts" => [
+                    ["text" => $message["content"]]
                 ]
-            ]
-        ];
+            ];
+        }, $chats);
+
+        return $formattedMessages;
     }
     
 }
