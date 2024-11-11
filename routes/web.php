@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorAppointmentController;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProblemController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +20,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/ai-chat', [DashboardController::class, 'aiChat'])->name('ai-chat');
 
     Route::get('/user-problem', [UserProblemController::class, 'index'])->name('user-problem');
-    Route::get('/appointments', [DoctorAppointmentController::class, 'index'])->name('appointments');
+    Route::get('/user-problem/{id}', [UserProblemController::class, 'details'])->name('user-problem.details');
+
+    Route::post('/appointments/{user_problem_id?}', [DoctorAppointmentController::class, 'index'])->name('appointments');
+    Route::post('/appointment/store', [DoctorAppointmentController::class, 'store'])->name('appointment.store');
+
+    Route::post('/foods/{user_problem_id?}', [FoodController::class, 'index'])->name('foods');
+    Route::post('/food/store', [FoodController::class, 'store'])->name('food.store');
+
+    Route::post('/medecines/{user_problem_id?}', [MedicineController::class, 'index'])->name('medecines');
+    Route::post('/medicine/store', [MedicineController::class, 'store'])->name('medicine.store');
+
     
 });
 

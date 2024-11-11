@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_problem_id');
             $table->string('name');
-            $table->integer('quantity')->default(1);
+            $table->decimal('quantity')->default(0);
             $table->string('unit')->nullable();
             $table->string('frequency')->nullable();
             $table->timestamps();

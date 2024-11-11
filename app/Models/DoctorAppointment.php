@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\AppointmentStatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DoctorAppointment extends Model
 {
@@ -13,6 +15,16 @@ class DoctorAppointment extends Model
         'details',          // Details about the appointment
         'appointment_date', // Date of the appointment
         'appointment_time', // Time of the appointment
-        'status',           // Status of the appointment
+        'status'     // Status of the appointment
     ];
+
+    /**
+     * Get the user_problem that owns the DoctorAppointment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user_problem(): BelongsTo
+    {
+        return $this->belongsTo(UserProblem::class);
+    }
 }

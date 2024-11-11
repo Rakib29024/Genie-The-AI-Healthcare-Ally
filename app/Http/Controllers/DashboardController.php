@@ -127,7 +127,6 @@ class DashboardController extends Controller
         ], 200);
     }
 
-    // TODO
     public function aiFormat(Request $reqest)
     {
             try {

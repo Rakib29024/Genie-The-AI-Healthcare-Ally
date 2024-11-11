@@ -30,17 +30,64 @@ class AiPromptService
     public function getWithJsonFormatQAPrompt($request,$question)
     {
         $aiChatPromptContent = $this->aiChatHistoryParser($request);
-        $listPrompt = [[
-            "role" => "user",
-            'parts' => [
-                [
-                    'text' => $question->ai_prompt.'
 
-                        Recipe = {"date": str}
-                        Return: list[Recipe]'
-                ]
-            ]]
-        ];
+        if($question->response_type == "appointments"){
+            $listPrompt = [[
+                "role" => "user",
+                'parts' => [
+                    [
+                        'text' => $question->ai_prompt.'
+    
+                            Recipe = {"date": str}
+                            Return: list[Recipe]'
+                    ]
+                ]]
+            ];
+        }else if($question->response_type == "food"){
+            $listPrompt = [[
+                "role" => "user",
+                'parts' => [
+                    [
+                        'text' => $question->ai_prompt.'
+    
+                            Recipe = {
+                                "name": "str",
+                                "quantity": "int",
+                                "unit": "str",
+                                "description": "str",
+                                "category": "str",
+                                "calories": "str",
+                                "protein": "str",
+                                "fat": "str",
+                                "carbohydrates": "str",
+                                "is_vegan": "int",
+                                "is_gluten_free": "int",
+                                "allergens": "str",
+                                "origin": "str"
+                            }
+                            Return: list[Recipe]'
+                    ]
+                ]]
+            ];
+        }else if($question->response_type == "medicine"){
+            $listPrompt = [[
+                "role" => "user",
+                'parts' => [
+                    [
+                        'text' => $question->ai_prompt.'
+    
+                            Recipe = {
+                                "name": "str",
+                                "quantity": "int",
+                                "unit": "str",
+                                "frequency": "str"
+                            }
+                            Return: list[Recipe]'
+                    ]
+                ]]
+            ];
+        }
+
         $aiPrompt = array_merge($aiChatPromptContent, $listPrompt);
 
         return (object) [
@@ -51,7 +98,6 @@ class AiPromptService
                 'response_mime_type' => 'application/json'
             ]
         ];
-
     }
 
     public function getWithAllJsonFormat($text)

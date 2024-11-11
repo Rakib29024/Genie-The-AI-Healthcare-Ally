@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppointmentStatusEnum;
 use App\Models\DoctorAppointments;
 use App\Http\Requests\StoreDoctorAppointmentsRequest;
 use App\Http\Requests\UpdateDoctorAppointmentsRequest;
@@ -12,10 +13,20 @@ use Illuminate\Support\Facades\Log;
 
 class DoctorAppointmentController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $user_problem_id = null)
     {
         try {
-            $data = DoctorAppointment::orderBy('created_at', 'DESC')->paginate(5);
+            $data = DoctorAppointment::orderBy('created_at', 'DESC')->with(['user_problem.problem.category']);
+
+            if($user_problem_id) {
+                $data = $data->where('user_problem_id', $user_problem_id);
+            }
+            
+            $data = $data->paginate(5)->through(function ($appointment) {
+                $appointment->statusLabel = AppointmentStatusEnum::label($appointment->status);
+                return $appointment;
+            });
+            
         } catch (Exception $ex) {
             Log::error($ex->getMessage(). '  ' . $ex->getLine() . ' ' . $ex->getFile());
             return response()->json(["message" => $ex->getMessage(),"status" => 500], 500);
@@ -35,15 +46,31 @@ class DoctorAppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDoctorAppointmentsRequest $request)
-    {
-        //
+    public function store(Request $request){
+        try {
+            Log::info("Appointment Request Data: ". json_encode($request->all()));
+            $data = DoctorAppointment::create([
+                'user_problem_id' => $request->user_problem_id,
+                'user_id' => auth()->id(),
+                'appointment_date' => $request->date,
+                'status' => AppointmentStatusEnum::PENDING
+            ]);
+            Log::info("Appointment Created Successfully with: ". json_encode($data));
+        } catch (Exception $ex) {
+            Log::error($ex->getMessage(). '  ' . $ex->getLine() . ' ' . $ex->getFile());
+            return response()->json(["message" => "Something went wrong", "status" => 500], 500);
+        }
+
+        return response()->json([
+            "message"=> "Appointment Created Successfully", 
+            "status" => 200
+        ], 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(DoctorAppointments $doctorAppointments)
+    public function show(DoctorAppointment $doctorAppointments)
     {
         //
     }
@@ -51,7 +78,7 @@ class DoctorAppointmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DoctorAppointments $doctorAppointments)
+    public function edit(DoctorAppointment $doctorAppointments)
     {
         //
     }
@@ -59,7 +86,7 @@ class DoctorAppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDoctorAppointmentsRequest $request, DoctorAppointments $doctorAppointments)
+    public function update(UpdateDoctorAppointmentsRequest $request, DoctorAppointment $doctorAppointments)
     {
         //
     }
@@ -67,7 +94,7 @@ class DoctorAppointmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DoctorAppointments $doctorAppointments)
+    public function destroy(DoctorAppointment $doctorAppointments)
     {
         //
     }
