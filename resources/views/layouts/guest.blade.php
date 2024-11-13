@@ -72,6 +72,23 @@
         .text-shadow {
           text-shadow: 0px 14px 15px rgb(12 25 87 / 98%)
         }
+
+        .custom-card {
+            box-shadow: 0px 0px 800px 250px #143476;
+                    }
+            
+                    .custom-label {
+                        background-color: #012f58;
+                    }
+                                
+                    .common-bg {
+                        background-color: rgb(27 49 79);
+                        color: ghostwhite;
+                    }
+
+                    form{
+                        min-width: 520px;
+                    }
       </style>
 </head>
 
@@ -105,9 +122,7 @@
                     </defs>
                 </svg>
               </div>
-          
-            <h1 class="text-7xl font-bold mb-4 mt-8" style="color: #a8d7ff;position: relative;z-index: 10;">GENIE : THE AI HEALTH ALLY</h1>
-            {{-- <p class="text-xl mb-6">THE AI HEALTH ASSITANCE FOR WOMEN</p> --}}
+        
             <div class="flex space-x-6 justify-center mt-16">
                 {{$slot}}
             </div>

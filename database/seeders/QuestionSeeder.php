@@ -17,17 +17,17 @@ class QuestionSeeder extends Seeder
             [
                 'response_type' => 'appointments',
                 'user_question' => 'Looking for Next Appointments',
-                'ai_prompt' => "So, when should I take visit the doctor? give me the further appointment list."
+                'ai_prompt' => "So, Provide a list of 10 future possible appointment dates in Y-m-d format and make gap of 7 days after in each dates.Where date must be greater then today's date. use the JSON schema:"
             ],
             [
                 'response_type' => 'food',
                 'user_question' => 'Looking for Food Suggestions',
-                'ai_prompt' => "So, what kind of food or fruits should I eat daily to prevent the problem or helps me to recover my health condition? give me a list."
+                'ai_prompt' => "So, what kind of food or fruits should I eat daily to recover my health condition? give me a list using the JSON schema:"
             ],
             [
                 'response_type' => 'medicine',
                 'user_question' => 'Looking for Food Suggestions',
-                'ai_prompt' => "So, which medicine should I take to cure? give me a list."
+                'ai_prompt' => "So, which medicine should I take to cure? give me a list using the JSON schema:"
             ],
         ]);
     }

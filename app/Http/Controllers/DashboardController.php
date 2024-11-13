@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\ApiFacade;
+use App\Jobs\SendAppointmentReminderMailJob;
 use App\Models\Category;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorAppointments;
@@ -192,6 +193,57 @@ class DashboardController extends Controller
         return response()->json([
             "message"=>"Responsed successfully",
             "htmlContent" => $htmlContent, 
+            "status" => 200
+        ], 200);
+    }
+
+    public function followUpIssuerIssue($id)
+    {
+        try {
+            // user problem 
+            $userProblem = UserProblem::where('id', $id)->with(['appointments'=> function($query){
+                return $query;
+            },'foods','medicines','category','problem'])->where('user_id', auth()->id())->first();
+
+            $aiRes = json_decode($userProblem->ai_response, true);
+            // dd($aiRes['candidates']);
+            $data['issueHistory'] = [
+                [
+                    "ai" => false,
+                    "content" => "I was suffering ". $userProblem?->category?->name ?? "N/A" .". My health issue In-details: \n ". $userProblem->details ?? $userProblem?->problem?->details,
+                    "component" => false,
+                    "data" => []
+                ],
+                [
+                    "ai" => true,
+                    "content" => "<h1><strong>Genie Description:</strong><h1>".$this->aiResponseParserService->parseToHtml($aiRes),
+                    "component" => false,
+                    "data" => []
+                ],
+                [
+                    "ai" => true,
+                    "content" => 'ai-suggested-appointment-component',
+                    "component" => true,
+                    "data" => $userProblem->appointments,
+                ],
+                [
+                    "ai" => true,
+                    "content" => 'ai-suggested-food-component',
+                    "component" => true,
+                    "data" => $userProblem->foods,
+                ]
+            ];
+            
+
+        } catch (Exception $ex) {
+            Log::error($ex->getMessage(). '  ' . $ex->getLine() . ' ' . $ex->getFile());
+            $htmlContent = "<strong>".$ex->getMessage()."</strong>";
+            return response()->json(["message" => $ex->getMessage(), "status" => 500], 500);
+        }
+
+        return response()->json([
+            "message"=>"Responsed successfully",
+            "data" => $data, 
             "status" => 200
         ], 200);
     }

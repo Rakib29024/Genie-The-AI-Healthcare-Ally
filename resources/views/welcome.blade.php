@@ -8,15 +8,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       .logo {
-        width: 48px;
-        height: 48px;
-        transform: scale(1.8);
+          width: 48px;
+          height: 48px;
+          transform: scale(1.8);
       }
 
       .cutom-btn {
-        width: 200px;
-        font-weight: bold;
-        background: #d82100;
+          width: 200px;
+          font-weight: bold;
+          background: #d82100;
       }
 
       .cutom-btn:hover {
@@ -24,54 +24,58 @@
           box-shadow: 0 0 400px 200px rgb(0 42 87);
       }
 
-        .custom-gradient {
-            background: linear-gradient(18deg, #35031e, #000359);
-        }
+      .custom-gradient {
+          background: linear-gradient(18deg, #35031e, #000359);
+      }
 
-        .loader-section {
+      .loader-section {
           position: relative;
-        }
+      }
 
-        .loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50px;
-            height: 50px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%; /* Circular shape */
-            background: radial-gradient(circle, rgba(0, 13, 131, 0), rgba(5, 11, 68, 0.295));
-            animation: pulse 2s infinite ease-in-out, waveLight 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
-        }
+      .loader {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 50px;
+          height: 50px;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          /* Circular shape */
+          background: radial-gradient(circle, rgba(0, 13, 131, 0), rgba(5, 11, 68, 0.295));
+          animation: pulse 2s infinite ease-in-out, waveLight 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
-        @keyframes pulse {
-            0%, 100% {
-                width: 50px;
-                height: 50px;
-            }
-            50% {
-                width: 100px;
-                height: 100px;
-            }
-        }
+      @keyframes pulse {
 
-        @keyframes waveLight {
-            0%, 100% {
-                opacity: 1;
-                filter: drop-shadow(0 0 10px rgba(8, 24, 167, 0.3))
-                        drop-shadow(0 0 40px rgba(0, 60, 255, 0.6))
-                        drop-shadow(0 0 80px rgba(255, 255, 255, 0.8));
-            }
-            50% {
-                opacity: .8;
-                filter: drop-shadow(0 0 20px rgba(8, 24, 167, 0.6))
-                        drop-shadow(0 0 80px rgba(0, 60, 255, 1))
-                        drop-shadow(0 0 150px rgba(255, 255, 255, 1));
-            }
-        }
-        .text-shadow {
+          0%,
+          100% {
+              width: 50px;
+              height: 50px;
+          }
+
+          50% {
+              width: 100px;
+              height: 100px;
+          }
+      }
+
+      @keyframes waveLight {
+
+          0%,
+          100% {
+              opacity: 1;
+              filter: drop-shadow(0 0 10px rgba(8, 24, 167, 0.3)) drop-shadow(0 0 40px rgba(0, 60, 255, 0.6)) drop-shadow(0 0 80px rgba(255, 255, 255, 0.8));
+          }
+
+          50% {
+              opacity: .8;
+              filter: drop-shadow(0 0 20px rgba(8, 24, 167, 0.6)) drop-shadow(0 0 80px rgba(0, 60, 255, 1)) drop-shadow(0 0 150px rgba(255, 255, 255, 1));
+          }
+      }
+
+      .text-shadow {
           text-shadow: 0px 14px 15px rgb(12 25 87 / 98%)
-        }
+      }
       </style>
 </head>
 

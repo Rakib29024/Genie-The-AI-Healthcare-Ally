@@ -13,7 +13,7 @@ class UserProblemController extends Controller
     public function index(Request $request)
     {
         try {
-            $data = UserProblem::orderBy('created_at', 'DESC')->withCount(['appointments','foods','medicines'])->with(['category','problem'])->paginate(5);
+            $data = UserProblem::orderBy('created_at', 'DESC')->withCount(['appointments','foods','medicines'])->with(['category','problem'])->where('user_id', auth()->id())->paginate(5);
         } catch (Exception $ex) {
             Log::error($ex->getMessage(). '  ' . $ex->getLine() . ' ' . $ex->getFile());
             return response()->json(["message" => $ex->getMessage(),"status" => 500], 500);

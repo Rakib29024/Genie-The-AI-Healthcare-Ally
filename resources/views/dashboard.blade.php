@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="mx-auto rounded-lg overflow-hidden p-4" style="background: linear-gradient(12deg, #330000 0%, #00086df2 100%);">
+        <div class="mx-auto rounded-lg overflow-hidden p-4" style="background: linear-gradient(12deg, #8e0000 0%, #00086e 100%);">
             <div class="flex items-center justify-between">  
                 <div class="relative flex justify-center">
                     <dotlottie-player src="https://lottie.host/1b4c86fb-8a42-45cf-882f-9eba3545920a/1nkzV3BqTx.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></dotlottie-player>
@@ -8,7 +8,7 @@
                 
                 <div class="text-center text-white">
                     <h1 class="main-title mx-4">
-                        WELCOME TO "GENIE" : WOMEN AI HEALTH ASSITANCE
+                        WELCOME TO "GENIE" : WOMEN AI HEALTH ALLY
                     </h1>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                                         </td> --}}
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             
-                                                @{{ data.category.name }}
+                                                @{{ limitToWords(data.details) }}
                                         </td>
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             
@@ -160,13 +160,13 @@
                                     dark:focus:ring-gray-700 dark:border-gray-700">
                                                 View
                                             </a>
-                                            <a :href="'user-problem/'+ data.id"
+                                            <button @click="folloUpUserIssue(data.id)"
                                             class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none 
                                 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm 
                                 px-2 py-2 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 
                                 dark:focus:ring-gray-700 dark:border-gray-700">
                                             Follow-Up
-                                        </a>
+                                        </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -205,6 +205,7 @@
                                 Next &raquo;
                                 </button>
                             </div>
+                            <h3 v-else class="text-red-200 text-bold p-2 text-center" > No data found. </h3>
                         </div>
                     </div>
 
@@ -218,6 +219,7 @@
                                     <tr>
                                         <th scope="col" class="px-6 py-3">Health Issue</th>
                                         <th scope="col" class="px-6 py-3">Date</th>
+                                        <th scope="col" class="px-6 py-3">Time</th>
                                         <th scope="col" class="px-6 py-3">Status</th>
                                     </tr>
                                 </thead>
@@ -225,7 +227,12 @@
                                     <tr class="" v-for="(data, i) in appointmentList" :key="i">
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.user_problem?.problem?.category?.name }}</td>
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.appointment_date }}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.statusLabel }}</td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.appointment_time }}</td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-white" :class="data.status==1 ? 'bg-gray-500' :(data.status==2?'bg-blue-500':(data.status==3?'bg-green-500':(data.status==4?'bg-yellow-500':'')))">
+                                            @{{ data?.statusLabel }}
+                                            </span>
+                                        </td>
                                         
                                     </tr>
                                 </tbody>
@@ -239,20 +246,20 @@
                                 aria-label="Previous"
                                 >
                                 &laquo; Previous
-                            </button>
-                            
-                                {{-- <div class="page-numbers">
-                                <a
-                                    v-for="page in pageNumbers"
-                                    :key="page"
-                                    :href="`http://127.0.0.1:8000/appointments?page=${page}`"
-                                    :class="{ active: page === userProblemCurrentPage }"
-                                    @click.prevent="goToAppointmentPage(page)"
-                                >
-                                    {{ page }}
-                                </a>
-                                <span class="dots" v-if="hasMorePages">...</span>
-                                </div> --}}
+                                </button>
+                                
+                                    {{-- <div class="page-numbers">
+                                    <a
+                                        v-for="page in pageNumbers"
+                                        :key="page"
+                                        :href="`http://127.0.0.1:8000/appointments?page=${page}`"
+                                        :class="{ active: page === userProblemCurrentPage }"
+                                        @click.prevent="goToAppointmentPage(page)"
+                                    >
+                                        {{ page }}
+                                    </a>
+                                    <span class="dots" v-if="hasMorePages">...</span>
+                                    </div> --}}
                             
                                 <button
                                 href="#"
@@ -264,6 +271,7 @@
                                 Next &raquo;
                                 </button>
                             </div>
+                            <h3 v-else class="text-red-200 text-bold p-2 text-center" > No data found. </h3>
                         </div>
                     </div>
             </div>
@@ -343,9 +351,9 @@
                 <li v-for="(item, index) in data.list" :key="index" 
                     style="display: inline-flex; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid #e2e8f0; margin-bottom: 4px; border-radius: 8px;">
                     
-                    <input type="date" :value="item.date" class="p-2.5 text-gray-900 text-sm rounded-lg common-bg dark:text-white"/>
-                    
-                    <button 
+                    <input type="date" :value="item.date ?? item.appointment_date" class="p-2.5 text-gray-900 text-sm rounded-lg common-bg dark:text-white"/>
+
+                    <button v-if="!data.old"
                         @click="add(item.date)" 
                         type="button" 
                         class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none 
@@ -357,6 +365,7 @@
                         Add
                         
                     </button>
+                    <input v-else type="time" :value="item.appointment_time" class="p-2.5 text-gray-900 text-sm rounded-lg common-bg dark:text-white"/>
                 </li>
             </ul>
             </div>
@@ -424,7 +433,7 @@
                 <div class="relative custom-card overflow-x-auto rounded-lg">
                 <label class="block px-6 py-4 text-lg font-bold custom-label text-gray-700 dark:text-gray-300">Ai Suggested Food List</label>
 
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <table v-if="data.list.length>0" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Name</th>
@@ -432,7 +441,7 @@
                                 <th scope="col" class="px-6 py-3">Unit</th>
                                 <th scope="col" class="px-6 py-3">Calories</th>
                                 <th scope="col" class="px-6 py-3">protein</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-6 py-3" v-if="!data.old">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -443,7 +452,7 @@
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{item.calories}}</td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{item.protein}}</td>
                                 <td class="text-center">
-                                    <button 
+                                    <button v-if="!data.old"
                                         @click="add(item)" 
                                         type="button" 
                                         class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none 
@@ -457,6 +466,8 @@
                             </tr>
                         </tbody>
                     </table>
+                    <h3 v-else class="text-red-200 text-bold p-2 text-center" > No foods are found. </h3>
+
                 </div>
             `,
             methods: {
@@ -529,7 +540,7 @@
                                 <th scope="col" class="px-6 py-3">Quantity</th>
                                 <th scope="col" class="px-6 py-3">Unit</th>
                                 <th scope="col" class="px-6 py-3">Frequency</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-6 py-3" v-if="!data.old">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -541,7 +552,7 @@
                                 <td class="text-center"> 
                                     <button v-if="item?.name"
                                         @click="add(item)" 
-                                        type="button" 
+                                        type="button" v-if="!data.old"
                                         class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none 
                                             focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm 
                                             px-5 py-2 dark:bg-gray-800 dark:hover:bg-gray-700 
@@ -989,11 +1000,60 @@
 
                 limitToWords(text){
                     if (!text) return '';
-                    const words = text.split(' ');
-                    return words.length > wordLimit
-                        ? words.slice(0, wordLimit).join(' ') + '...'
+                    const limit = 20;
+                    return text.length > limit
+                        ? text.substring(0, limit) + " ..."
                         : text;
-                }
+                },
+
+                folloUpUserIssue(id) {
+                    let _that = this;
+                    _that.error = [];
+                    _that.error_message = "";
+                    _that.success_message = "";
+                    let pageUrl = '/user-issue-follow-up/' + id;
+
+                    axios.get(pageUrl).then(function (response) {
+                        _that.isLoading = false;
+                        _that.error_message = "";
+                        _that.success_message = "";
+
+                        if(response.data.status==200){
+                            let issueHistory = response.data.data.issueHistory;
+                            _that.aiConversetions = [];
+                            issueHistory.forEach(element => {
+                                _that.aiConversetions.push({
+                                    ai : element.ai,
+                                    content : element.content,
+                                    data : {
+                                        list: element.data,
+                                        currentUserProblemId: id,
+                                        old: true
+                                    },
+                                    component : element.component,
+                                });
+                            });
+                        }else{
+                            _that.error_message = response.data.message;
+                        }
+
+                    }).catch(function (error) {
+                        _that.isLoading = false;
+
+                        if (error.response && error.response.status === 422) {
+                            _that.error_message = "";
+                            if (error.response.data.errors) {
+                                for (const [key, messages] of Object.entries(error.response.data.errors)) {
+                                    _that.error_message += messages.join('<br>') + '<br>';
+                                }
+                            } else {
+                                _that.error_message = error.response.data.message;
+                            }
+                        } else {
+                            _that.error_message = "An unexpected error occurred.";
+                        }
+                    });
+                },
             },
 
             created() {

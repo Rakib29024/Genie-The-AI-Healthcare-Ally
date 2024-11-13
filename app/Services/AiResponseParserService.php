@@ -28,8 +28,10 @@ class AiResponseParserService
 
     function parseToHtml($aiResponse)
     {
+        $responseContent = $aiResponse['candidates'][0]['content']['parts'][0]['text'];
+        Log::info("Ai Response: ". $responseContent);
         $mock = "**I'm not a doctor, but I can help you when you should see your doctor.**";
-        $text = $aiResponse['candidates'][0]['content']['parts'][0]['text'] ?? $mock;
+        $text = $responseContent ?? $mock;
         Log::info("Ai Response Text: ". $text);
 
         if(!$text) return null;
@@ -57,7 +59,7 @@ class AiResponseParserService
 
     function parseToJsonArray($aiResponse)
     {
-        $text = $aiResponse['candidates'][0]['content']['parts'][0]['text'];
+        $text = $aiResponse['candidates'][0]['content']['parts'][0]['text'] ?? null;
         Log::info("Ai Response Text: ". $text);
 
         if(!$text) return [];

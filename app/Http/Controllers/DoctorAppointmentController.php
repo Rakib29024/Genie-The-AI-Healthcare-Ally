@@ -16,7 +16,7 @@ class DoctorAppointmentController extends Controller
     public function index(Request $request, $user_problem_id = null)
     {
         try {
-            $data = DoctorAppointment::orderBy('created_at', 'DESC')->with(['user_problem.problem.category']);
+            $data = DoctorAppointment::orderBy('created_at', 'DESC')->with(['user_problem.problem.category'])->where('user_id', auth()->id());
 
             if($user_problem_id) {
                 $data = $data->where('user_problem_id', $user_problem_id);
@@ -86,9 +86,24 @@ class DoctorAppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDoctorAppointmentsRequest $request, DoctorAppointment $doctorAppointments)
+    public function update(UpdateDoctorAppointmentsRequest $request, DoctorAppointment $doctorAppointment)
     {
-        //
+        try {
+            Log::info("Appointment Update Request Data: ". json_encode($request->all()));
+            Log::info("Appointment Data To Update: ". json_encode($doctorAppointment));
+            $data = $doctorAppointment->update([
+                'status' => $request->status
+            ]);
+            Log::info("Appointment Updated Successfully with: ". json_encode($data));
+        } catch (Exception $ex) {
+            Log::error($ex->getMessage(). '  ' . $ex->getLine() . ' ' . $ex->getFile());
+            return response()->json(["message" => "Something went wrong", "status" => 500], 500);
+        }
+
+        return response()->json([
+            "message"=> "Appointment Updated Successfully", 
+            "status" => 200
+        ], 200);
     }
 
     /**

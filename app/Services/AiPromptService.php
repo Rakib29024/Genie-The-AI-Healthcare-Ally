@@ -32,16 +32,25 @@ class AiPromptService
         $aiChatPromptContent = $this->aiChatHistoryParser($request);
 
         if($question->response_type == "appointments"){
-            $listPrompt = [[
-                "role" => "user",
-                'parts' => [
-                    [
-                        'text' => $question->ai_prompt.'
-    
-                            Recipe = {"date": str}
-                            Return: list[Recipe]'
+            $listPrompt = [
+                [
+                    "role" => "user",
+                    'parts' => [
+                        [
+                            'text' => "today date is ". date('Y-m-d') 
+                        ]
                     ]
-                ]]
+                ],
+                [
+                    "role" => "user",
+                    'parts' => [
+                        [
+                            'text' => $question->ai_prompt.'
+                                Recipe = {"date": str}
+                                Return: list[Recipe]'
+                        ]
+                    ]
+                ]
             ];
         }else if($question->response_type == "food"){
             $listPrompt = [[

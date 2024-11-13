@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="w-full rounded-lg shadow-lg overflow-hidden p-4" style="background: linear-gradient(12deg, #330000 0%, #00086df2 100%);">
+        <div class="w-full rounded-lg shadow-lg overflow-hidden p-4" style="background: linear-gradient(12deg, #8e0000 0%, #00086e 100%);">
             <div class="flex items-center justify-center p-8">
                 {{-- <div class="relative flex justify-center">
                     <dotlottie-player src="https://lottie.host/1b4c86fb-8a42-45cf-882f-9eba3545920a/1nkzV3BqTx.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></dotlottie-player>
@@ -30,15 +30,15 @@
                             <th scope="col" class="px-6 py-3">Category</th>
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->category?->name }}
+                               : {{ $user_problem->category?->name }}
 
                             </th>
 
-                            <th scope="col" class="px-6 py-3">Health Issue</th>
+                            <th scope="col" class="px-6 py-3">Total Appointments</th>
 
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->appointments_count }}
+                                : {{ $user_problem->appointments_count }}
 
                             </th>
                         </tr>
@@ -46,14 +46,14 @@
                             <th scope="col" class="px-6 py-3">Problem</th>
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->problem?->title }}
+                                : {{ $user_problem->problem?->title }}
 
                             </th>
-                            <th scope="col" class="px-6 py-3">Health Issue</th>
+                            <th scope="col" class="px-6 py-3">Total Foods</th>
 
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->foods_count }}
+                                : {{ $user_problem->foods_count }}
 
                             </th>
                         </tr>
@@ -61,14 +61,14 @@
                             <th scope="col" class="px-6 py-3">Health Issue</th>
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->problem?->details ?? $user_problem->details}}
+                                : {{ $user_problem->problem?->details ?? $user_problem->details}}
 
                             </th>
-                            <th scope="col" class="px-6 py-3">Health Issue</th>
+                            <th scope="col" class="px-6 py-3">Total Medecines</th>
 
                             <th scope="row" class="px-6 py-4 font-medium dark:text-white">
                                 
-                                {{ $user_problem->medicines_count }}
+                                : {{ $user_problem->medicines_count }}
 
                             </th>
                         </tr>
@@ -111,22 +111,50 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Date</th>
+                                <th scope="col" class="px-6 py-3">Time</th>
                                 <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                <th scope="col" class="px-6 py-3" style="width:30%;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="border-b dark:border-gray-700" v-for="(data, i) in appointmentList" :key="i">
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.appointment_date ?? "N/A" }}</td>
-                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.statusLabel ?? "N/A" }}</td>
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.appointment_time ?? "N/A" }}</td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <a :href="'user-problem/'+ data.id"
-                                        class="text-white bg-gray-300 hover:bg-gray-700 focus:outline-none
-                                        focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm 
-                                        px-5 py-2 me-2 mb-2 dark:bg-gray-500 dark:hover:bg-gray-600 
-                                        dark:focus:ring-gray-500 dark:border-gray-600">
-                                        View
-                                    </a>
+                                    
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-white" :class="data.status==1 ? 'bg-gray-500' :(data.status==2?'bg-blue-500':(data.status==3?'bg-green-500':(data.status==4?'bg-yellow-500':'')))">
+                                        @{{ data?.statusLabel ?? "N/A" }}
+                                    </span>
+                                </td>
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <button @click="updateAppointmentStatus(data.id, 1)"
+                                        class="text-white border border-gray-300 hover:bg-gray-300 hover:text-white focus:outline-none
+                                            focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 
+                                            dark:border-gray-400 dark:hover:bg-gray-500 dark:hover:text-white 
+                                            dark:focus:ring-gray-500">
+                                        Pending
+                                    </button>
+                                    <button @click="updateAppointmentStatus(data.id, 2)"
+                                        class="text-white border border-blue-700 hover:bg-blue-500 hover:text-white focus:outline-none
+                                            focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 
+                                            dark:border-blue-400 dark:hover:bg-blue-500 dark:hover:text-white 
+                                            dark:focus:ring-blue-700">
+                                        Confirmed
+                                    </button>
+                                    <button @click="updateAppointmentStatus(data.id, 4)"
+                                        class="text-white border border-green-700 hover:bg-green-500 hover:text-white focus:outline-none
+                                            focus:ring-4 focus:ring-green-700 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 
+                                            dark:border-green-400 dark:hover:bg-green-500 dark:hover:text-white 
+                                            dark:focus:ring-green-700">
+                                        Completed
+                                    </button>
+                                    <button @click="updateAppointmentStatus(data.id, 3)"
+                                        class="text-white border border-yellow-700 hover:bg-yellow-500 hover:text-white focus:outline-none
+                                            focus:ring-4 focus:ring-yellow-700 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 
+                                            dark:border-yellow-400 dark:hover:bg-yellow-500 dark:hover:text-white 
+                                            dark:focus:ring-yellow-700">
+                                        Cancelled
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -171,7 +199,7 @@
                                 {{-- <th scope="col" class="px-6 py-3">Is Vegan?</th> --}}
                                 <th scope="col" class="px-6 py-3">Is Gluten Free?</th>
                                 {{-- <th scope="col" class="px-6 py-3">Origin</th> --}}
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                {{-- <th scope="col" class="px-6 py-3">Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -187,7 +215,7 @@
                                 {{-- <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.is_vegan ? "Yes"  : "No"}}</td> --}}
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.is_gluten_free ? "Yes" : "No" }}</td>
                                 {{-- <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.origin ?? "N/A" }}</td> --}}
-                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{-- <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <a :href="'user-problem/'+ data.id"
                                         class="text-white bg-gray-300 hover:bg-gray-700 focus:outline-none
                                         focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm 
@@ -195,7 +223,7 @@
                                         dark:focus:ring-gray-500 dark:border-gray-600">
                                         View
                                     </a>
-                                </td>
+                                </td> --}}
                             </tr>
                         </tbody>
                     </table>
@@ -231,7 +259,7 @@
                                 <th scope="col" class="px-6 py-3">Name</th>
                                 <th scope="col" class="px-6 py-3">Quantity</th>
                                 <th scope="col" class="px-6 py-3">Frequency</th>
-                                <th scope="col" class="px-6 py-3">Action</th>
+                                {{-- <th scope="col" class="px-6 py-3">Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -239,7 +267,7 @@
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.name ?? "N/A" }}</td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.quantity ?? "N/A" }}</td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">@{{ data?.frequency ?? "N/A" }}</td>
-                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{-- <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <a :href="'user-problem/'+ data.id"
                                         class="text-white bg-gray-300 hover:bg-gray-700 focus:outline-none
                                         focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm 
@@ -247,7 +275,7 @@
                                         dark:focus:ring-gray-500 dark:border-gray-600">
                                         View
                                     </a>
-                                </td>
+                                </td> --}}
                             </tr>
                         </tbody>
                     </table>
@@ -329,7 +357,6 @@
                     };
 
                     axios.post(pageUrl, dataForm).then(function (response) {
-                        console.log(response)
                         _that.isLoading = false;
                         _that.error_message = "";
                         _that.success_message = "";
@@ -409,6 +436,43 @@
                         _that.medecinePagination.page = response.data.medecines.current_page
                         _that.medecinePagination.totalCount = response.data.medecines.total
                         _that.medecinePagination.totalPages = response.data.medecines.last_page
+                    }).catch(function (error) {
+                        _that.isLoading = false;
+
+                        if (error.response && error.response.status === 422) {
+                            _that.error_message = "";
+                            if (error.response.data.errors) {
+                                for (const [key, messages] of Object.entries(error.response.data.errors)) {
+                                    _that.error_message += messages.join('<br>') + '<br>';
+                                }
+                            } else {
+                                _that.error_message = error.response.data.message;
+                            }
+                        } else {
+                            _that.error_message = "An unexpected error occurred.";
+                        }
+                    });
+                },
+
+                updateAppointmentStatus(id, status) {
+                    let _that = this;
+                    _that.error = [];
+                    _that.error_message = "";
+                    _that.success_message = "";
+                    let pageUrl = `/appointment/update/`+id;
+                    let dataForm = {
+                        status
+                    };
+
+                    axios.post(pageUrl, dataForm).then(function (response) {
+                        _that.isLoading = false;
+                        _that.error_message = "";
+                        _that.success_message = "";
+                        if (response.data.status === 200) {
+                            _that.success_message = response?.data?.message;
+                            _that.getAppointmentList();
+
+                        }
                     }).catch(function (error) {
                         _that.isLoading = false;
 

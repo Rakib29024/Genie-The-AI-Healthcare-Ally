@@ -18,12 +18,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/health-issue-info', [DashboardController::class, 'healthIssueInfoStore'])->name('health-issue-info.store');
     Route::post('/ai-format', [DashboardController::class, 'aiFormat'])->name('ai-format');
     Route::post('/ai-chat', [DashboardController::class, 'aiChat'])->name('ai-chat');
+    Route::get('/user-issue-follow-up/{user_problem_id}', [DashboardController::class, 'followUpIssuerIssue'])->name('user-issue-follow-up');
 
     Route::get('/user-problem', [UserProblemController::class, 'index'])->name('user-problem');
     Route::get('/user-problem/{id}', [UserProblemController::class, 'details'])->name('user-problem.details');
 
     Route::post('/appointments/{user_problem_id?}', [DoctorAppointmentController::class, 'index'])->name('appointments');
     Route::post('/appointment/store', [DoctorAppointmentController::class, 'store'])->name('appointment.store');
+    Route::post('/appointment/update/{doctorAppointment}', [DoctorAppointmentController::class, 'update'])->name('appointment.update');
 
     Route::post('/foods/{user_problem_id?}', [FoodController::class, 'index'])->name('foods');
     Route::post('/food/store', [FoodController::class, 'store'])->name('food.store');
